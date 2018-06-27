@@ -52,7 +52,7 @@ class Home extends Component{
                 <div className="container">
                 <Navbar />
                     <h2>Bear</h2>
-                    <p>Paste a link to be shortend {this.state.message}</p>
+                    <p>Paste a link to be shortend</p>
                     <form className="form-inline mt-2 mt-md-0">
                     <input className="form-control mr-sm-2" type="text" placeholder="https://www.reddit..." aria-label="Search" />
                     <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Shorten</button>
