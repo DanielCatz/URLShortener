@@ -27,7 +27,7 @@ class Home extends Component{
         }
        // console.log(url).json();
 
-        fetch('/shorten/'+ url)
+        fetch('api/shorten/'+ url)
         .then(shorturl => shorturl.json())
         .then((res) => {
           if (!res.success){
@@ -37,8 +37,12 @@ class Home extends Component{
               if(res.shorturl.length){
                 console.log(res);  
                 this.setState({ message: res.shorturl[0].shorturl });
-              }else
-              console.log("gotta make one");
+              }
+              else{
+              var base = window.location.protocol+'//'+window.location.host;
+              console.log(base);
+                window.location.replace('http://www.google.com/');
+            }
         }
         });    
 
@@ -49,8 +53,8 @@ class Home extends Component{
     render(){
         return(
             <div>
-                <div className="container">
                 <Navbar />
+                <div className="container">
                     <h2>Bear</h2>
                     <p>Paste a link to be shortend</p>
                     <form className="form-inline mt-2 mt-md-0">

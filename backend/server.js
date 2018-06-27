@@ -57,7 +57,7 @@ router.get('/', (req, res) => {
   res.send({message: 'API Is Perfectly Adequate'});
 });
 
-app.post('/', function (req, res) {
+router.post('/', function (req, res) {
     connection.query('INSERT INTO users SET ?', req.body, 
         function (err, result) {
             if (err) throw err;
@@ -66,7 +66,7 @@ app.post('/', function (req, res) {
     );
 });
 
-app.get('/shorten/:origurl', (req,res) =>{
+router.get('/shorten/:origurl', (req,res) =>{
   connection.query('SELECT * FROM links WHERE origurl = ?',[req.params.origurl], (err, shorturl, fields) => {
     if(!err)
       return res.json({ success: true, shorturl});
@@ -75,7 +75,7 @@ app.get('/shorten/:origurl', (req,res) =>{
   })
 });
 
-app.get('/shorten', (req,res) =>{
+router.get('/shorten', (req,res) =>{
   connection.query('SELECT * FROM links', (err, rows, fields) => {
     if(!err)
       return res.json({somethingLikedata:rows});
