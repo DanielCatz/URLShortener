@@ -18,37 +18,65 @@ class Home extends Component{
         this.setState({url: e.target.value});
     }
     
+    encode(num){
+        var alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
+        var  base = alphabet.length;
+        var encoded = '';
+        while (num){
+          var remainder = num % base;
+          num = Math.floor(num / base);
+          encoded = alphabet[remainder].toString() + encoded;
+        }
+        return encoded;
+    }  
+
+    
+
     onSubmit = (e) => {
         e.preventDefault();
-        const { url } = this.state;       
+        var { url } = this.state;       
         if (!url){ 
             console.log('empty');
             return;
         }
+        url = url.replace(/^https?:\/\//, ''); //strip protocol
        // console.log(url).json();
+        var generated='';
+       
+        fetch('shorten/'+ url, {//add link seed
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+        }).then(res => res.json()).then((res) => {
+            if (!res.success) this.setState({ error: res.error.message || res.error });
+            else{
+                var urlHash = this.encode(res.origurl.insertId);
+                var id =res.origurl.insertId;
+                fetch('shorten/', {//finalize shorten
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id, urlHash }),                    
+                }).then(res => res.json()).then((res) => {
+                    if (!res.success) this.setState({ error: res.error.message || res.error });
+                    else{
+                        console.log(urlHash+' at '+ id);
 
-        fetch('api/shorten/'+ url)
-        .then(shorturl => shorturl.json())
-        .then((res) => {
-          if (!res.success){
-          this.setState({ message: res.error });
-        }
-          else {
-              if(res.shorturl.length){
-                console.log(res);  
-                this.setState({ message: res.shorturl[0].shorturl });
-              }
-              else{
-              var base = window.location.protocol+'//'+window.location.host;
-              console.log(base);
-                window.location.replace('http://www.google.com/');
-            }
-        }
-        });    
+                        this.setState({message : window.location.protocol+'//'+window.location.host+'/'+urlHash }); 
+    
+                        
+                    } 
+                });
+            } 
 
+
+       
+      });
     }
     
+   
     
+
+
+      
     
     render(){
         return(
@@ -57,16 +85,13 @@ class Home extends Component{
                 <div className="container">
                     <h2>Bear</h2>
                     <p>Paste a link to be shortend</p>
-                    <form className="form-inline mt-2 mt-md-0">
-                    <input className="form-control mr-sm-2" type="text" placeholder="https://www.reddit..." aria-label="Search" />
-                    <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Shorten</button>
-                </form>
-                </div>
-                <div className="form">
-                    <ShortenForm 
-                    url = {this.state.url}                     
-                    handleChangeText={this.onChangeText}
-                    handleSubmit={this.onSubmit} />
+                    <p>{this.state.message} </p>
+                    <div className="form">
+                        <ShortenForm 
+                        url = {this.state.url}                     
+                        handleChangeText={this.onChangeText}
+                        handleSubmit={this.onSubmit} />
+                    </div>                    
                 </div>
             </div>
 

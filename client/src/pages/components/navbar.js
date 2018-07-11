@@ -6,6 +6,7 @@ class Navbar extends Component{
     render(){
         return(
             <nav className="navbar navbar-expand-md navbar-dark bg-dark mb-4">
+                <div className="container">
                 <a className="navbar-brand" href="#">URL Shortner</a>
                 <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
@@ -26,6 +27,7 @@ class Navbar extends Component{
                     <input className="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search" />
                     <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
                 </form>
+                </div>
                 </div>
           </nav>       
         );

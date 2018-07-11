@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 
 const ShortenForm = props =>(
 
-<form onSubmit={props.handleSubmit}>
-    <input
+<form onSubmit={props.handleSubmit} className="form-inline mt-2 mt-md-0">
+    <input className="form-control mr-sm-2"
       type="text"
       name="url"
       placeholder="https://www.reddit..."
@@ -13,7 +13,8 @@ const ShortenForm = props =>(
       onChange={props.handleChangeText}
     />
    
-    <button type="submit">Shorten</button>
+    <button className="btn btn-outline-success my-2 my-sm-0"
+     type="submit">Shorten</button>
   </form>
 );
 
