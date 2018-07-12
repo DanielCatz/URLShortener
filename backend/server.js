@@ -28,6 +28,15 @@ if(DB_PORT === 3306){
         insecureAuth: true
     });
 } else {
+    var connection = mysql.createPool({
+      connertionLimit :100,
+      host : 'us-cdbr-iron-east-05.cleardb.net',
+      user : 'bc94188da6b689',
+      password : '6ff05708',
+      database : 'heroku_efbf7049afe1905',
+      debug : 'false'
+
+    });
 
    //live server
 }
@@ -36,9 +45,9 @@ connection.connect();
 
 
 
-connection.query('CREATE DATABASE IF NOT EXISTS test', function (err) {
+connection.query('CREATE DATABASE IF NOT EXISTS url', function (err) {
     if (err) throw err;
-    connection.query('USE test', function (err) {
+    connection.query('USE url', function (err) {
         if (err) throw err;
           connection.query('CREATE TABLE IF NOT EXISTS links('
           + 'id INT NOT NULL AUTO_INCREMENT,'
@@ -69,7 +78,7 @@ router.get('/shorten/:origurl(*)', (req,res) =>{//given long url find its short 
   })
 });
 
-//given short url find its long version in db
+//given short url id  find its long version in db
 router.get('/orig/:id', (req,res) =>{
   connection.query('SELECT origurl FROM links WHERE id = ?',[req.params.id], (err, origurl, fields) => {
     if(!err)
