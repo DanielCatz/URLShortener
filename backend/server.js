@@ -11,6 +11,8 @@ import mysql from 'mysql';
 const app = express();
 const router = express.Router();
 
+/*CLEARDB_DATABASE_URL: mysql://bc94188da6b689:6ff05708@us-cdbr-iron-east-04.cleardb.net/heroku_efbf7049afe1905?reconnect=true */
+
 // set our port to either a predetermined port number if you have set it up, or 3001
 const API_PORT = process.env.API_PORT || 3001;
 const DB_PORT = process.env.API_PORT || 3306;
