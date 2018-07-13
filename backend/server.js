@@ -47,9 +47,9 @@ if(API_PORT === 3001){
 
 
 
-connection.query('CREATE DATABASE IF NOT EXISTS url', function (err) {
+connection.query('CREATE DATABASE IF NOT EXISTS heroku_efbf7049afe1905', function (err) {
     if (err) throw err;
-    connection.query('USE url', function (err) {
+    connection.query('USE heroku_efbf7049afe1905', function (err) {
         if (err) throw err;
           connection.query('CREATE TABLE IF NOT EXISTS links('
           + 'id INT NOT NULL AUTO_INCREMENT,'
