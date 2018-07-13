@@ -43,7 +43,7 @@ if(API_PORT === 3001){
    //live server
 }
 
-connection.connect();
+//connection.connect();
 
 
 
