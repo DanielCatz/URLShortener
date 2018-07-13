@@ -14,8 +14,8 @@ const router = express.Router();
 /*CLEARDB_DATABASE_URL: mysql://bc94188da6b689:6ff05708@us-cdbr-iron-east-04.cleardb.net/heroku_efbf7049afe1905?reconnect=true */
 
 // set our port to either a predetermined port number if you have set it up, or 3001
-const API_PORT = process.env.API_PORT || 3001;
-const DB_PORT = process.env.API_PORT || 3306;
+const API_PORT = process.env.PORT || 3001;
+const DB_PORT = process.env.DB_PORT || 3306;
 // now we should configure the API to use bodyParser and look for JSON data in the request body
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -32,7 +32,7 @@ if(DB_PORT === 3306){
 } else {
     var connection = mysql.createPool({
       connertionLimit :100,
-      host : 'us-cdbr-iron-east-05.cleardb.net',
+      host : 'us-cdbr-iron-east-04.cleardb.net',
       user : 'bc94188da6b689',
       password : '6ff05708',
       database : 'heroku_efbf7049afe1905',
