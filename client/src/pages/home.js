@@ -43,14 +43,16 @@ class Home extends Component{
        // console.log(url).json();
         var generated='';
        
-        fetch('shorten/'+ url, {//add link seed
+        fetch('shorten/', {//add link seed
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ url }),                    
         }).then(res => res.json()).then((res) => {
             if (!res.success) this.setState({ error: res.error.message || res.error });
             else{
-                var urlHash = this.encode(res.origurl.insertId);
-                var id =res.origurl.insertId;
+                console.log(res);
+                var id =res.insertId;
+                var urlHash = this.encode(id);
                 fetch('shorten/', {//finalize shorten
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },

@@ -29,20 +29,21 @@ class Short extends Component{
         var id = this.decode(key);
         console.log('row ' +id);
        
-        fetch('orig/'+ id)
+        fetch('redirect/'+ id)
         .then(origurl => origurl.json())
         .then((res) => {
             if (!res.success){
                 this.setState({ message: res.error });
             }
-            else {
-                if(res.origurl.length){
-                    console.log(res.origurl[0].origurl);
-                window.location.replace('http://'+res.origurl[0].origurl);
-                //this.setState({ message: res.origurl[0].origurl });
+            else { //redirect to site
+                console.log(res);
+                console.log(res.origurl.origurl.length);
+                if(res.origurl.origurl.length){
+                    console.log(res.origurl.origurl);
+                window.location.replace('http://'+res.origurl.origurl);
                 }
-                else{
-                 window.location.replace('expired');
+                else{//reirect to 404
+                window.location.replace('expired');
                 }
             }
         });    

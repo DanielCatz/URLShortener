@@ -4,14 +4,12 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import logger from 'morgan';
-import mysql from 'mysql';
+import sqlite from 'sqlite3';
 //import Comment from './models/comment';
 
 // and create our instances
 const app = express();
 const router = express.Router();
-
-/*CLEARDB_DATABASE_URL: mysql://bc94188da6b689:6ff05708@us-cdbr-iron-east-04.cleardb.net/heroku_efbf7049afe1905?reconnect=true */
 
 // set our port to either a predetermined port number if you have set it up, or 3001
 const API_PORT = process.env.PORT || 3001;
@@ -21,46 +19,6 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(logger('dev'));
 
-if(API_PORT === 3001){
-    var connection = mysql.createConnection({
-        host: 'localhost',
-        port: 3306,
-        user: 'DanielCatz',
-        password: 'Ouroborosu1',
-        insecureAuth: true
-    });
-} else {
-    var connection = mysql.createPool({
-      connertionLimit :100,
-      host : 'us-cdbr-iron-east-04.cleardb.net',
-      user : 'bc94188da6b689',
-      password : '6ff05708',
-      database : 'heroku_efbf7049afe1905',
-      debug : 'false'
-
-    });
-
-   //live server
-}
-
-//connection.connect();
-
-
-
-connection.query('CREATE DATABASE IF NOT EXISTS heroku_efbf7049afe1905', function (err) {
-    if (err) throw err;
-    connection.query('USE heroku_efbf7049afe1905', function (err) {
-        if (err) throw err;
-          connection.query('CREATE TABLE IF NOT EXISTS links('
-          + 'id INT NOT NULL AUTO_INCREMENT,'
-          + 'PRIMARY KEY(id),'
-          + 'origurl VARCHAR(300),'
-          + 'shorturl VARCHAR(300)'
-          +  ')', function (err) {
-              if (err) throw err;
-          });
-    });
-});
 
 // now we can set the route path & initialize the API
 router.get('/', (req, res) => {
@@ -68,48 +26,43 @@ router.get('/', (req, res) => {
   res.send({message: 'API Is Perfectly Adequate'});
 });
 
-
-//retrieve short
-router.get('/shorten/:origurl(*)', (req,res) =>{//given long url find its short version in db
-  connection.query('SELECT * FROM links WHERE origurl = ?',[req.params.origurl], (err, shorturl, fields) => {
-    console.log(req.params.origurl);
-    if(!err)
-    return res.json({ success: true, shorturl});
-    else
-    return res.json({ success: false, error: err }); 
-  })
+// Connect to DB
+let db = new sqlite.Database('./db/nanourl.db', (err) => {
+  if(err)
+  console.log('db failed',err);
+  else console.log('Connected to DB');
 });
 
-//given short url id  find its long version in db
-router.get('/orig/:id', (req,res) =>{
-  connection.query('SELECT origurl FROM links WHERE id = ?',[req.params.id], (err, origurl, fields) => {
-    if(!err)
-      return res.json({ success: true, origurl});
-    else
-      return res.json({ success: false, error: err }); 
-  })
+// Initiallize db
+db.run('CREATE TABLE IF NOT EXISTS links('
++ 'id INTEGER PRIMARY KEY AUTOINCREMENT,'
++ 'origurl TEXT,'
++ 'shorturl TEXT'
++  ')', function (err) {
+    if (err) throw err;
 });
 
-//insert base entry for long into table
-router.post('/shorten/:origurl(*)', (req,res) =>{//
-  connection.query('INSERT INTO links VALUES (NULL,?,NULL)',[req.params.origurl], (err, origurl, fields) => {
-    if(!err)
-      return res.json({ success: true, origurl});
-    else
-      return res.json({ success: false, error: err }); 
-  })
+//insert a long url in db, no short
+router.post('/shorten', (req,res)=>{
+  const { url} = req.body;
+  db.run('INSERT INTO links VALUES (NULL,?,?)',[url], function(err) {
+      if(!err){
+        return res.json({ success: true, boop:false, insertId: this.lastID});
+      }
+      else
+        return res.json({ success: false, error: err }); 
+    })  
 });
 
 
-
-//update longurl entry with hash
+//update longurl entry with biject hash
 router.put('/shorten', (req, res) => {
   const { id, urlHash  } = req.body;
   if (!id || !urlHash) {
-    return res.json({ success: false, error: 'No url id provided' });
+    return res.json({ success: false, error: 'No url/hash id provided' });
   }
   else{
-    connection.query('UPDATE links SET shorturl = ? WHERE id = ?',[urlHash, id], (err, origurl, fields) => {
+    db.run('UPDATE links SET shorturl = ? WHERE id = ?',[urlHash, id], (err, origurl, fields) => {
       if(!err)
         return res.json({ success: true, origurl});
       else
@@ -118,14 +71,27 @@ router.put('/shorten', (req, res) => {
   }
 });
 
-//test
-router.get('/shorten', (req,res) =>{
-  connection.query('SELECT * FROM links', (err, rows, fields) => {
+// given key, return long url
+router.get('/redirect/:id', (req,res) =>{
+  console.log("looking for " + req.params.id)
+  db.get('SELECT origurl FROM links WHERE id = ?',[req.params.id], (err, origurl, fields) => {
     if(!err)
-      return res.json({somethingLikedata:rows});
+      return res.json({ success: true, origurl});
     else
-      console.log(err);
+      return res.json({ success: false, error: err }); 
   })
+});
+
+
+//sqlite test
+router.get('/lites', (req,res) =>{
+  db.all('SELECT * FROM links', (err, result) => {
+    if(!err)
+        return res.json({ success: true, result: result});
+      else
+        return res.json({ success: false, error: err }); 
+
+  });  
 });
 
 // Use our router configuration when we call /api
