@@ -10,9 +10,6 @@ class Expired extends Component{
           message:''
           };
       }
-
-    
-    
     
     render(){
         return(

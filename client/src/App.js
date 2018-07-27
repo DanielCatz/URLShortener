@@ -14,7 +14,7 @@ class App extends Component {
         <Route exact path='/' component= {Home} />
         <Route exact path='/home' component= {Home} />
         <Route exact path='/expired' component= {Expired} />
-        <Route path='/' component= {Short} />        
+        <Route path ='/' component = {Short}/>
           </Switch>
         </Router>
     

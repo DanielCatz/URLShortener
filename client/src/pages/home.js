@@ -43,7 +43,7 @@ class Home extends Component{
        // console.log(url).json();
         var generated='';
        
-        fetch('shorten/', {//add link seed
+        fetch('api/shorten/', {//add link seed
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ url }),                    
@@ -53,7 +53,7 @@ class Home extends Component{
                 console.log(res);
                 var id =res.insertId;
                 var urlHash = this.encode(id);
-                fetch('shorten/', {//finalize shorten
+                fetch('api/shorten/', {//finalize shorten
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ id, urlHash }),                    
@@ -85,7 +85,7 @@ class Home extends Component{
             <div>
                 <Navbar />
                 <div className="container">
-                    <h2>Bear</h2>
+                    <h2>URL Shortener</h2>
                     <p>Paste a link to be shortend</p>
                     <p>{this.state.message} </p>
                     <div className="form">

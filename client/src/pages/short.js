@@ -29,17 +29,14 @@ class Short extends Component{
         var id = this.decode(key);
         console.log('row ' +id);
        
-        fetch('redirect/'+ id)
+        fetch('api/redirect/'+ id)
         .then(origurl => origurl.json())
         .then((res) => {
             if (!res.success){
                 this.setState({ message: res.error });
             }
-            else { //redirect to site
-                console.log(res);
-                console.log(res.origurl.origurl.length);
-                if(res.origurl.origurl.length){
-                    console.log(res.origurl.origurl);
+            else { //redirect to site            
+                if(res.origurl){
                 window.location.replace('http://'+res.origurl.origurl);
                 }
                 else{//reirect to 404
@@ -47,8 +44,7 @@ class Short extends Component{
                 }
             }
         });    
-       
-      }
+       }
     
     
     
