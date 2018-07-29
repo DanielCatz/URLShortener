@@ -9,7 +9,7 @@
     "start-client": "cd client && npm start",
     "start-static": "cd client && npm run build",
     "start-dev": "concurrently \"npm run start-server\" \"npm run start-client\"",
-    "start-prod": "concurrently \"npm run start-server\" \"npm run start-static\""
+    "start": "concurrently \"npm run start-server\" \"npm run start-static\""
   },
   "author": "Daniel Cat",
   "license": "ISC",

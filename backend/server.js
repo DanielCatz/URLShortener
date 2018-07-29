@@ -70,10 +70,11 @@ router.get('/redirect/:id', (req,res) =>{
       return res.json({ success: false, error: err }); 
   })
 });
-
+// base
 app.use('/api', router);
+// Production or dev
 var API_PORT = 3001;
-if(process.env.NODE_ENV=="production"|| 1){
+if(process.env.NODE_ENV=="production"){
   API_PORT = 3000;
   app.use( express.static(path.resolve(__dirname, '../client/build') ) );
   app.get('*', (req, res)=>{
@@ -82,8 +83,5 @@ if(process.env.NODE_ENV=="production"|| 1){
 
 }
 
-// Use our router configuration when we call /api
-//http://nephewapps.com/2018/05/10/handling-dev-vs-production-api-calls-using-create-react-app/
-//tests using JEST
 
 app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
