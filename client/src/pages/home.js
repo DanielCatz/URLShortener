@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import Navbar from './components/navbar';
 import ShortenForm from './components/shortenform';
+import BijectiveHash from './business/utils';
 class Home extends Component{
     
     constructor() {
@@ -17,20 +18,6 @@ class Home extends Component{
         newState[e.target.name] = e.target.value;
         this.setState({url: e.target.value});
     }
-    
-    encode(num){
-        var alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
-        var  base = alphabet.length;
-        var encoded = '';
-        while (num){
-          var remainder = num % base;
-          num = Math.floor(num / base);
-          encoded = alphabet[remainder].toString() + encoded;
-        }
-        return encoded;
-    }  
-
-    
 
     onSubmit = (e) => {
         e.preventDefault();
@@ -52,7 +39,7 @@ class Home extends Component{
             else{
                 console.log(res);
                 var id =res.insertId;
-                var urlHash = this.encode(id);
+                var urlHash = BijectiveHash.encode(id);
                 fetch('api/shorten/', {//finalize shorten
                     method: 'PUT',
                     headers: { 'Content-Type': 'application/json' },

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import Navbar from './components/navbar';
+import BijectiveHash from './business/utils';
+
 class Short extends Component{
     
     constructor() {
@@ -11,22 +13,9 @@ class Short extends Component{
           };
       }
 
-      decode(str){
-        var alphabet = "123456789abcdefghijkmnopqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ";
-        var  base = alphabet.length;
-        var decoded = 0;
-        while (str){
-          var index = alphabet.indexOf(str[0]);
-          var power = str.length - 1;
-          decoded += index * (Math.pow(base, power));
-          str = str.substring(1);
-        }
-        return decoded;
-      }
-
       componentDidMount() {
         var key = window.location.href.split('/')[3];
-        var id = this.decode(key);
+        var id = BijectiveHash.decode(key);
         console.log('row ' +id);
        
         fetch('api/redirect/'+ id)
