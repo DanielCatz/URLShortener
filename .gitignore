@@ -5,3 +5,4 @@ client/build/
 .DS_Store
 .env
 .env.default
+backend/db/test.db
