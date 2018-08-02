@@ -2,11 +2,12 @@ import axios from "axios";
 // api.js
 let API_URL;
 
-process.env.NODE_ENV == true
+process.env.NODE_ENV == "test"
   ? (API_URL = "http://localhost:3001/")
   : (API_URL = "");
 
-console.log(API_URL);
+console.log(`${API_URL} is the url`);
+
 const API = {
   InsertIncompleteUrlEntry: url => {
     return axios.post(`${API_URL}api/shorten/`, {
@@ -26,6 +27,8 @@ const API = {
   GetLinkRow: id => {
     return axios.get(`api/link/${id}`);
   }
+
+  //setup a teardown and setup
 };
 
 export default API;

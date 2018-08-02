@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "set NODE_ENV=true&& jest --watchAll",
+    "test": "set NODE_ENV=test&& jest --watchAll",
     "start-server": "cd backend && nodemon server.js --exec babel-node --presets es2015,stage-0",
     "start-client": "cd client && npm start",
     "start-static": "cd client && npm run build",
