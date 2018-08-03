@@ -31,21 +31,41 @@ let db = new sqlite.Database(dbhost, err => {
 
 // Initiallize db
 
-//If Dev, set up test
+//If Dev, set up test, separate file
 if (process.env.NODE_ENV != "production") {
   //empty db for possible testing
-  db.run("DROP TABLE IF EXISTS links", function(err) {
-    if (err) throw err;
+  router.delete("/delete", (req, res) => {
+    console.log("in");
+    db.run(`DROP TABLE links`, function(err) {
+      if (err) {
+        console.log(err);
+        throw err;
+      }
+      console.log("good");
+    });
   });
 
-  router.get("/link:id", (req, res) => {
-    console.log("looking for " + req.params.id);
+  router.get("/link/:id", (req, res) => {
     db.get(
       "SELECT * FROM links WHERE id = ?",
       [req.params.id],
-      (err, origurl, fields) => {
-        if (!err) return res.json({ success: true, origurl });
+      (err, row, fields) => {
+        console.log(row);
+        if (!err) return res.json({ success: true, row: row, fields: fields });
         else return res.json({ success: false, error: err });
+      }
+    );
+  });
+
+  router.put("/create", (req, res) => {
+    db.run(
+      "CREATE TABLE IF NOT EXISTS links(" +
+        "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+        "origurl TEXT," +
+        "shorturl TEXT" +
+        ")",
+      function(err) {
+        if (err) throw err;
       }
     );
   });

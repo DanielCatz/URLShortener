@@ -25,10 +25,25 @@ const API = {
   //For Testing Only
 
   GetLinkRow: id => {
-    return axios.get(`api/link/${id}`);
-  }
+    return axios.get(`${API_URL}api/link/${id}`);
+  },
 
   //setup a teardown and setup
+
+  CheckAPI: () => {
+    console.log(process.env.NODE_ENV);
+    return process.env.NODE_ENV;
+  },
+
+  DropTable: table => {
+    return axios.delete(`${API_URL}api/delete`, {
+      table: table
+    });
+  },
+
+  CreateTable: () => {
+    return axios.delete(`${API_URL}api/create`);
+  }
 };
 
 export default API;
