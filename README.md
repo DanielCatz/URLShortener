@@ -1,4 +1,5 @@
 # URL Shortener
+Hosted at https://weeurl.glitch.me/ - Give it time to spin up, I'm using free host :P
 
 ## Features
 
