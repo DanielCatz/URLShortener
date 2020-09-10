@@ -41,7 +41,7 @@ $ npm install
 $ cd ..
 $ npm run start
 ```
-
+Remember to edit the .env variable to production
 ### Todos
 
 - Auto copy link to clipboard feature
