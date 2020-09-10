@@ -41,7 +41,7 @@ $ npm install
 $ cd ..
 $ npm run start
 ```
-Remember to edit the .env variable to production
+Remember to edit the .env variable to production and adjust proxy port
 ### Todos
 
 - Auto copy link to clipboard feature
